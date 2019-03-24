@@ -10,7 +10,8 @@
   "dependencies": {
     "react": "16.8.3",
     "react-native": "0.59.1",
-    "react-native-exception-handler": "^2.10.7"
+    "react-native-exception-handler": "^2.10.7",
+    "react-native-restart": "^0.0.9"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",

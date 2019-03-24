@@ -5244,6 +5244,11 @@ react-native-exception-handler@^2.10.7:
   resolved "http://registry.npm.taobao.org/react-native-exception-handler/download/react-native-exception-handler-2.10.7.tgz#3ce2f10d6a8add35fdc036af62c2859c4b7f505c"
   integrity sha1-POLxDWqK3TX9wDavYsKFnEt/UFw=
 
+react-native-restart@^0.0.9:
+  version "0.0.9"
+  resolved "http://registry.npm.taobao.org/react-native-restart/download/react-native-restart-0.0.9.tgz#252611ef4e28a791b02ab4dabd1a7e9ae5fec6b3"
+  integrity sha1-JSYR704op5GwKrTavRp+muX+xrM=
+
 react-native@0.59.1:
   version "0.59.1"
   resolved "http://registry.npm.taobao.org/react-native/download/react-native-0.59.1.tgz#3274dcc0f9558799bd41c8092acac2a79bd627ce"

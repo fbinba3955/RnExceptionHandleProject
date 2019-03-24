@@ -12,6 +12,7 @@ import {Platform,
   Text, View, 
   Button, 
   NativeModules,Alert} from 'react-native';
+import RNRestart from 'react-native-restart';
 import {setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler'
 
 const instructions = Platform.select({
@@ -36,18 +37,34 @@ const ErrorUtils = require('ErrorUtils');
 setJSExceptionHandler((error, isFatal)=>{
   // 您可以捕获这些未处理的异常并执行诸如显示警报或弹出窗口之类的任务，执行清理甚至点击API以在关闭应用程序之前通知开发团队。
   // Alert.alert(error.name,error.message,[{text: 'OK'}])
-  NativeModules.RnException.handleException(error.message).then((msg) => {
-    Alert.alert(msg)
+  NativeModules.RnException.handleException(((isFatal) ? "Fatal:":"Normal") + error.name + "---" + error.message).then((msg) => {
+    Console.log(msg)
   }).catch((err) => {
-    Alert.alert(err)
+    console(err)
   });
+  if (isFatal) {
+    Alert.alert(
+        '发生程序异常',
+        'Error: ' + ((isFatal) ? 'Fatal:' : '') + error.name + error.message + '/n需要重启应用程序。',
+      [{
+        text: '重启',
+        onPress: () => {
+          RNRestart.Restart();
+        }
+      }]
+    );
+  } else {
+    console.log(err)
+  }
+  
 }, true)
 
 type Props = {};
 export default class App extends Component<Props> {
 
   _testButtonClick() {
-    throw new Error('i crashed！！！')
+    // throw new Error('i crashed！！！')
+    tip = a
   }
 
   render() {

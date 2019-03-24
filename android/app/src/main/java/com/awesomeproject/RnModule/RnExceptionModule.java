@@ -29,6 +29,12 @@ public class RnExceptionModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void handleException(String msg, Promise promise) {
-        Log.e(MODULE_NAME, msg);
+        try {
+            Log.e(MODULE_NAME, msg);
+            promise.resolve(msg);
+        }
+        catch (Exception e) {
+            promise.reject(e);
+        }
     }
 }
