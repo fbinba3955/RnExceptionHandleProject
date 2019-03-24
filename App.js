@@ -13,7 +13,7 @@ import {Platform,
   Button, 
   NativeModules,Alert} from 'react-native';
 import RNRestart from 'react-native-restart';
-import {setJSExceptionHandler, setNativeExceptionHandler} from 'react-native-exception-handler'
+import {setJSExceptionHandler} from 'react-native-exception-handler'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -23,6 +23,29 @@ const instructions = Platform.select({
 });
 
 const ErrorUtils = require('ErrorUtils');
+
+const errorHandler = (e, isFatal) => {
+  var errorMsg = {type: ((isFatal) ? "Fatal:":"Normal"), name : e.name, message: e.message};
+  NativeModules.RnException.handleException(errorMsg).then((msg) => {
+    Console.log(msg)
+  }).catch((err) => {
+    console(err)
+  });
+  if (isFatal) {
+    Alert.alert(
+        'Unexpected error occurred',
+        '123',
+      [{
+        text: 'Restart',
+        onPress: () => {
+          RNRestart.Restart();
+        }
+      }]
+    );
+  } else {
+    console.log(e); // So that we can see it in the ADB logs in case of Android if needed
+  }
+};
 
 /**
  * JS_Exceptions：你的Javascript代码产生的错误
@@ -34,37 +57,13 @@ const ErrorUtils = require('ErrorUtils');
  * isFatal 是否是致命的，一定发生崩溃的
  */
 
-setJSExceptionHandler((error, isFatal)=>{
-  // 您可以捕获这些未处理的异常并执行诸如显示警报或弹出窗口之类的任务，执行清理甚至点击API以在关闭应用程序之前通知开发团队。
-  // Alert.alert(error.name,error.message,[{text: 'OK'}])
-  NativeModules.RnException.handleException(((isFatal) ? "Fatal:":"Normal") + error.name + "---" + error.message).then((msg) => {
-    Console.log(msg)
-  }).catch((err) => {
-    console(err)
-  });
-  if (isFatal) {
-    Alert.alert(
-        '发生程序异常',
-        'Error: ' + ((isFatal) ? 'Fatal:' : '') + error.name + error.message + '/n需要重启应用程序。',
-      [{
-        text: '重启',
-        onPress: () => {
-          RNRestart.Restart();
-        }
-      }]
-    );
-  } else {
-    console.log(err)
-  }
-  
-}, true)
+setJSExceptionHandler(errorHandler,false)
 
 type Props = {};
 export default class App extends Component<Props> {
 
   _testButtonClick() {
-    // throw new Error('i crashed！！！')
-    tip = a
+    throw new Error('i crashed！！！')
   }
 
   render() {
@@ -73,7 +72,7 @@ export default class App extends Component<Props> {
         <Text style={styles.welcome}>Welcome to React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
-        <Button title="Learn More" color="#841584" onPress={()=>this._testButtonClick()}></Button>
+        <Button title="来一发" color="#841584" onPress={()=>this._testButtonClick()}></Button>
       </View>
     );
   }
